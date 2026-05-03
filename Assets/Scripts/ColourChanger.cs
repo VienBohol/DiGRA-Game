@@ -18,7 +18,7 @@ public class ColourChanger : MonoBehaviour
         UpdateColor();
     }
 
-    void UpdateColor()
+    public void UpdateColor()
     {
         if (WorldStateManager.Instance.isPurpleWorld)
             sr.color = purpleColor;

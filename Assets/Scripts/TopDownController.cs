@@ -25,12 +25,16 @@ public class TopDownController : MonoBehaviour
 
     void Update()
     {
-        Vector2 movement = controls.Player.Move.ReadValue<Vector2>();
-
         if (movement != Vector2.zero)
         {
-            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+            if (movement.x > 0)
+                transform.rotation = Quaternion.Euler(0, 0, -90);
+            else if (movement.x < 0)
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+            else if (movement.y > 0)
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            else if (movement.y < 0)
+                transform.rotation = Quaternion.Euler(0, 0, 180);
         }
     }
 
@@ -50,7 +54,21 @@ public class TopDownController : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
-        movement = context.ReadValue<Vector2>();
+        Vector2 input = context.ReadValue<Vector2>();
+
+        // Snap to 4 directions
+        if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+        {
+            movement = new Vector2(Mathf.Sign(input.x), 0);
+        }
+        else if (Mathf.Abs(input.y) > 0)
+        {
+            movement = new Vector2(0, Mathf.Sign(input.y));
+        }
+        else
+        {
+            movement = Vector2.zero;
+        }
     }
 
     void FixedUpdate()
