@@ -10,6 +10,8 @@ public class TopDownController : MonoBehaviour
     private Vector2 movement;
 
     private PlayerControls controls;
+    private float toggleCooldown = 0.5f;
+    private float lastToggleTime = -Mathf.Infinity;
 
     void Awake()
     {
@@ -43,12 +45,14 @@ public class TopDownController : MonoBehaviour
         controls.Enable();
         controls.Player.Move.performed += OnMove;
         controls.Player.Move.canceled += OnMove;
+        controls.Player.Interact.performed += OnToggleWorld;
     }
 
     void OnDisable()
     {
         controls.Player.Move.performed -= OnMove;
         controls.Player.Move.canceled -= OnMove;
+        controls.Player.Interact.performed -= OnToggleWorld;
         controls.Disable();
     }
 
@@ -69,6 +73,17 @@ public class TopDownController : MonoBehaviour
         {
             movement = Vector2.zero;
         }
+    }
+
+    private void OnToggleWorld(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+        if (Time.time < lastToggleTime + toggleCooldown)
+            return;
+
+        lastToggleTime = Time.time;
+        WorldStateManager.Instance.ToggleWorld();
     }
 
     void FixedUpdate()
