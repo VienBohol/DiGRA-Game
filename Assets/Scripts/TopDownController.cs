@@ -8,6 +8,7 @@ public class TopDownController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 movement;
+    private Animator animator;
 
     private PlayerControls controls;
     private float toggleCooldown = 0.5f;
@@ -17,27 +18,12 @@ public class TopDownController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         controls = new PlayerControls();
-
-        if (movement != Vector2.zero)
-        {
-            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
-            rb.rotation = angle;
-        }
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (movement != Vector2.zero)
-        {
-            if (movement.x > 0)
-                transform.rotation = Quaternion.Euler(0, 0, -90);
-            else if (movement.x < 0)
-                transform.rotation = Quaternion.Euler(0, 0, 90);
-            else if (movement.y > 0)
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            else if (movement.y < 0)
-                transform.rotation = Quaternion.Euler(0, 0, 180);
-        }
+        // intentionally empty - animation driven by OnMove
     }
 
     void OnEnable()
@@ -60,19 +46,38 @@ public class TopDownController : MonoBehaviour
     {
         Vector2 input = context.ReadValue<Vector2>();
 
-        // Snap to 4 directions
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
         {
-            movement = new Vector2(Mathf.Sign(input.x), 0);
+            if (input.x > 0)
+            {
+                movement = new Vector2(1, 0);
+                animator.SetInteger("direction", 3); // D
+            }
+            else
+            {
+                movement = new Vector2(-1, 0);
+                animator.SetInteger("direction", 2); // A
+            }
         }
         else if (Mathf.Abs(input.y) > 0)
         {
-            movement = new Vector2(0, Mathf.Sign(input.y));
+            if (input.y > 0)
+            {
+                movement = new Vector2(0, 1);
+                animator.SetInteger("direction", 0); // W
+            }
+            else
+            {
+                movement = new Vector2(0, -1);
+                animator.SetInteger("direction", 1); // S
+            }
         }
         else
         {
             movement = Vector2.zero;
         }
+
+        animator.SetBool("isMoving", movement != Vector2.zero);
     }
 
     private void OnToggleWorld(InputAction.CallbackContext context)
