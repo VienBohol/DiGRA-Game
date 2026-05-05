@@ -1198,7 +1198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e28ce80e56fe2d6478dd08c972e80e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColourChanger
-  greenColor: {r: 0, g: 1, b: 0, a: 1}
+  greenColor: {r: 1, g: 0, b: 1, a: 1}
   purpleColor: {r: 1, g: 0, b: 1, a: 0}
 --- !u!212 &1181669827
 SpriteRenderer:
@@ -2380,7 +2380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColourChanger
   greenColor: {r: 0, g: 1, b: 0, a: 0}
-  purpleColor: {r: 1, g: 0, b: 1, a: 1}
+  purpleColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!212 &1807394298
 SpriteRenderer:
   serializedVersion: 2
