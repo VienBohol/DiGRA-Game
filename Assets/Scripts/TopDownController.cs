@@ -23,7 +23,7 @@ public class TopDownController : MonoBehaviour
 
     void Update()
     {
-        // intentionally empty - animation driven by OnMove
+        
     }
 
     void OnEnable()
@@ -88,6 +88,7 @@ public class TopDownController : MonoBehaviour
             return;
 
         lastToggleTime = Time.time;
+        animator.SetTrigger("onShift"); 
         WorldStateManager.Instance.ToggleWorld();
     }
 
@@ -95,4 +96,5 @@ public class TopDownController : MonoBehaviour
     {
         rb.linearVelocity = movement.normalized * moveSpeed;
     }
+    
 }
