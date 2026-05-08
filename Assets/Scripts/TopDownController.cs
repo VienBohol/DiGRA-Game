@@ -7,6 +7,9 @@ public class TopDownController : MonoBehaviour
 {
     public float moveSpeed = 5f;
 
+    public bool hasKey = false;
+    public Key carryKey;
+
     private Rigidbody2D rb;
     private Vector2 movement;
     private Animator animator;
