@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class TopDownController : MonoBehaviour
@@ -11,7 +12,7 @@ public class TopDownController : MonoBehaviour
     private Animator animator;
 
     private PlayerControls controls;
-    private float toggleCooldown = 0.5f;
+    private float toggleCooldown = 1f;
     private float lastToggleTime = -Mathf.Infinity;
 
     void Awake()
@@ -88,7 +89,16 @@ public class TopDownController : MonoBehaviour
             return;
 
         lastToggleTime = Time.time;
-        animator.SetTrigger("onShift"); 
+
+        StartCoroutine(ShiftWorld());
+    }
+
+    private IEnumerator ShiftWorld()
+    {
+        animator.SetTrigger("onShift");
+
+        yield return new WaitForSeconds(0.5f);
+
         WorldStateManager.Instance.ToggleWorld();
     }
 
