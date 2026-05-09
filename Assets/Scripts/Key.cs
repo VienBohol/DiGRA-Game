@@ -8,6 +8,8 @@ public class Key : MonoBehaviour
 
     private Transform player;
 
+    private Vector3 velocity = Vector3.zero;
+
     private void Update()
     {
         if (isCollected && player != null)
@@ -23,11 +25,14 @@ public class Key : MonoBehaviour
 
             Vector3 targetPosition =
                 player.position - (Vector3)(followDirection * followDistance);
+            
+            targetPosition += Vector3.up * Mathf.Sin(Time.time * 5f) * 0.1f;
 
-            transform.position = Vector3.Lerp(
+            transform.position = Vector3.SmoothDamp(
                 transform.position,
                 targetPosition,
-                Time.deltaTime * 10f
+                ref velocity,
+                0.25f
             );
         }
     }
