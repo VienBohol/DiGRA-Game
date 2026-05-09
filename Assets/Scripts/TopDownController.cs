@@ -5,8 +5,11 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D))]
 public class TopDownController : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 5f;
+    public Vector2 lastMoveDirection = Vector2.down;
 
+    [Header("Key")]
     public bool hasKey = false;
     public Key carryKey;
 
@@ -79,6 +82,11 @@ public class TopDownController : MonoBehaviour
         else
         {
             movement = Vector2.zero;
+        }
+
+        if (movement != Vector2.zero)
+        {
+            lastMoveDirection = movement;
         }
 
         animator.SetBool("isMoving", movement != Vector2.zero);

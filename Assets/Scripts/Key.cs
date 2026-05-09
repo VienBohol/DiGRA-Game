@@ -12,7 +12,17 @@ public class Key : MonoBehaviour
     {
         if (isCollected && player != null)
         {
-            Vector3 targetPosition = player.position - player.up * followDistance;
+            TopDownController controller = player.GetComponent<TopDownController>();
+
+            Vector2 followDirection = Vector2.down;
+
+            if (controller != null)
+            {
+                followDirection = controller.lastMoveDirection;
+            }
+
+            Vector3 targetPosition =
+                player.position - (Vector3)(followDirection * followDistance);
 
             transform.position = Vector3.Lerp(
                 transform.position,
