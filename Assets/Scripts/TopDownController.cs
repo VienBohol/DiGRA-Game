@@ -13,6 +13,9 @@ public class TopDownController : MonoBehaviour
     public bool hasKey = false;
     public Key carryKey;
 
+    [Header("Rain UI Animation")]
+    public RainAnimator rainAnimator;
+
     private Rigidbody2D rb;
     private Vector2 movement;
     private Animator animator;
@@ -31,11 +34,6 @@ public class TopDownController : MonoBehaviour
         controls = new PlayerControls();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-    }
-
-    void Update()
-    {
-        
     }
 
     void OnEnable()
@@ -60,29 +58,13 @@ public class TopDownController : MonoBehaviour
 
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
         {
-            if (input.x > 0)
-            {
-                movement = new Vector2(1, 0);
-                animator.SetInteger("direction", 3); // D
-            }
-            else
-            {
-                movement = new Vector2(-1, 0);
-                animator.SetInteger("direction", 2); // A
-            }
+            movement = input.x > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            animator.SetInteger("direction", input.x > 0 ? 3 : 2);
         }
         else if (Mathf.Abs(input.y) > 0)
         {
-            if (input.y > 0)
-            {
-                movement = new Vector2(0, 1);
-                animator.SetInteger("direction", 0); // W
-            }
-            else
-            {
-                movement = new Vector2(0, -1);
-                animator.SetInteger("direction", 1); // S
-            }
+            movement = input.y > 0 ? new Vector2(0, 1) : new Vector2(0, -1);
+            animator.SetInteger("direction", input.y > 0 ? 0 : 1);
         }
         else
         {
@@ -90,9 +72,7 @@ public class TopDownController : MonoBehaviour
         }
 
         if (movement != Vector2.zero)
-        {
             lastMoveDirection = movement;
-        }
 
         animator.SetBool("isMoving", movement != Vector2.zero);
     }
@@ -100,12 +80,9 @@ public class TopDownController : MonoBehaviour
     private void OnToggleWorld(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-
-        if (Time.time < lastToggleTime + toggleCooldown)
-            return;
+        if (Time.time < lastToggleTime + toggleCooldown) return;
 
         lastToggleTime = Time.time;
-
         StartCoroutine(ShiftWorld());
     }
 
@@ -114,18 +91,18 @@ public class TopDownController : MonoBehaviour
         animator.SetTrigger("onShift");
 
         if (shiftSound != null)
-        {
             audioSource.PlayOneShot(shiftSound);
-        }
 
         yield return new WaitForSeconds(0.5f);
 
         WorldStateManager.Instance.ToggleWorld();
+
+        if (rainAnimator != null)
+            rainAnimator.Toggle();
     }
 
     void FixedUpdate()
     {
         rb.linearVelocity = movement.normalized * moveSpeed;
     }
-    
 }
