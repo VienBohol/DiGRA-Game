@@ -21,11 +21,16 @@ public class TopDownController : MonoBehaviour
     private float toggleCooldown = 1f;
     private float lastToggleTime = -Mathf.Infinity;
 
+    [Header("Audio")]
+    public AudioClip shiftSound;
+    private AudioSource audioSource;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         controls = new PlayerControls();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -107,6 +112,11 @@ public class TopDownController : MonoBehaviour
     private IEnumerator ShiftWorld()
     {
         animator.SetTrigger("onShift");
+
+        if (shiftSound != null)
+        {
+            audioSource.PlayOneShot(shiftSound);
+        }
 
         yield return new WaitForSeconds(0.5f);
 
