@@ -7,6 +7,13 @@ public class Key : MonoBehaviour
     private bool isCollected = false;
 
     private Transform player;
+    public AudioClip pickupSound;
+    private AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private Vector3 velocity = Vector3.zero;
 
@@ -50,6 +57,11 @@ public class Key : MonoBehaviour
             inventory.carryKey = this;
             player = other.transform;
             isCollected = true;
+
+            if (pickupSound != null)
+            {
+                audioSource.PlayOneShot(pickupSound);
+            }
 
             Debug.Log("Key picked up!");
         }
